@@ -3,8 +3,21 @@ version: '3'
 services:
   redis-server:
     image: 'redis'
-  node-app:
+
+  web:
     restart: always
-    build: .
+    build:
+      dockerfile: Dockerfile.dev
     ports:
       -'4001:8001'
+    image: docker-compose-react-app
+    volumes:
+      - ./:/app
+  
+  tests:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./:/app
+    command: ['npm', 'run', 'test']
